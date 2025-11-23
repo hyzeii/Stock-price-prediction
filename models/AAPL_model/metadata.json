@@ -1,0 +1,37 @@
+{
+    "ticker": "AAPL",
+    "lookback": 60,
+    "features": [
+        "Close",
+        "Volume",
+        "SMA_20",
+        "SMA_50",
+        "EMA_12",
+        "EMA_26",
+        "MACD",
+        "Signal_Line",
+        "RSI",
+        "BB_Upper",
+        "BB_Middle",
+        "BB_Lower",
+        "ATR",
+        "Volume_SMA",
+        "ROC"
+    ],
+    "n_features": 15,
+    "trained_date": "2025-11-23 14:23:26",
+    "model_architecture": {
+        "input_shape": [
+            60,
+            15
+        ],
+        "layers": [
+            "<LSTM name=lstm, built=True>",
+            "<Dropout name=dropout, built=True>",
+            "<LSTM name=lstm_1, built=True>",
+            "<Dropout name=dropout_1, built=True>",
+            "<Dense name=dense, built=True>",
+            "<Dense name=dense_1, built=True>"
+        ]
+    }
+}
