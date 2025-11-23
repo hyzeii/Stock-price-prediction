@@ -1,0 +1,38 @@
+api:
+  host: "0.0.0.0"
+  port: 8000
+  title: "Stock Price Prediction API"
+  version: "1.0.0"
+  debug: false
+
+paths:
+  model_dir: "./models"
+  data_dir: "./data"
+  cache_dir: "./cache"
+  log_dir: "./logs"
+
+data:
+  default_period: "2y"
+  min_data_points: 100
+  auto_adjust: true
+
+cache:
+  enable: true
+  ttl: 3600  # seconds
+  redis:
+    enable: false
+    host: "redis"
+    port: 6379
+    db: 0
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "stock_predictor.log"
+
+prediction:
+  max_days_ahead: 30
+  confidence_thresholds:
+    high: 2.0    # volatility < 2%
+    medium: 5.0  # volatility < 5%
+    # anything above is "low"

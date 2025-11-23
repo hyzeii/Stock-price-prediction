@@ -1,0 +1,69 @@
+# Default model architecture and training parameters
+default:
+  lookback: 60
+  train_split: 0.8
+  validation_split: 0.1
+  
+  architecture:
+    lstm_units: [128, 64]
+    dropout: 0.2
+    dense_units: [32]
+    
+  training:
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+    optimizer: "adam"
+    loss: "mean_squared_error"
+    early_stopping:
+      patience: 10
+      min_delta: 0.0001
+      
+  features:
+    base:
+      - Close
+      - Volume
+      - High
+      - Low
+      - Open
+    
+    technical_indicators:
+      sma:
+        - 20
+        - 50
+      ema:
+        - 12
+        - 26
+      bollinger_bands:
+        period: 20
+        std_dev: 2
+      rsi:
+        period: 14
+      macd:
+        fast: 12
+        slow: 26
+        signal: 9
+      atr:
+        period: 14
+      volume_sma:
+        period: 20
+      roc:
+        period: 10
+
+# Stock-specific configurations (override defaults)
+AAPL:
+  lookback: 60
+  architecture:
+    lstm_units: [256, 128, 64]
+    dropout: 0.3
+
+TSLA:
+  lookback: 90
+  training:
+    epochs: 100
+    batch_size: 16
+  architecture:
+    lstm_units: [128, 64]
+    dropout: 0.4
+
+# Add more stock-specific configs as needed
