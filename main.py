@@ -17,7 +17,7 @@ from pathlib import Path as PathlibPath
 app = FastAPI(
     title="Stock Price Prediction API",
     description="LSTM-based stock price prediction with technical analysis",
-    version="1.0.0"
+    version="1.4.0"
 )
 
 # Configuration
@@ -193,7 +193,7 @@ async def root():
     """Root endpoint"""
     return {
         "message": "Stock Price Prediction API",
-        "version": "1.0.0",
+        "version": "1.4.0",
         "endpoints": {
             "health": "/health",
             "predict": "/predict/{ticker}",
