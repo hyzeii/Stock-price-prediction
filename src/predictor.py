@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
 import yfinance as yf
 from datetime import datetime, timedelta
 import tensorflow as tf
@@ -211,6 +211,9 @@ class StockLSTMPredictor:
         test_rmse = np.sqrt(mean_squared_error(y_test_inv, test_pred_inv))
         train_mae = mean_absolute_error(y_train_inv, train_pred_inv)
         test_mae = mean_absolute_error(y_test_inv, test_pred_inv)
+
+        train_mape = mean_absolute_percentage_error(y_train_inv, train_pred_inv)
+        test_mape = mean_absolute_percentage_error(y_test_inv, test_pred_inv)
         
         print(f"\nModel Performance:")
         print(f"Train RMSE: ${train_rmse:.2f}, MAE: ${train_mae:.2f}")
@@ -219,8 +222,9 @@ class StockLSTMPredictor:
         return {
             'train_rmse': train_rmse, 'test_rmse': test_rmse,
             'train_mae': train_mae, 'test_mae': test_mae,
+            'train_mape': train_mape, 'test_mape': test_mape,
             'train_pred': train_pred_inv, 'test_pred': test_pred_inv,
-            'y_train': y_train_inv, 'y_test': y_test_inv
+            'y_train': y_train_inv, 'y_test': y_test_inv,
         }
     
     def inverse_transform_predictions(self, predictions):
