@@ -248,3 +248,4 @@ if __name__ == "__main__":
         host=config_manager.settings.api_host,
         port=config_manager.settings.api_port
     )
+
