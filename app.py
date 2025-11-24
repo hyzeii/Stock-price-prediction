@@ -16,31 +16,40 @@ def main():
 
     data = yf.download(stock, end=end, start=start)
 
+    data_close = data['Close'].values 
+
+    data_close = data_close.reshape(-1, 1) 
+
     st.subheader("Stock Data")
     st.write(data.describe())
 
 
+    # Plot 1: Closing Price vs Time chart
     st.subheader("Closing Price vs Time chart")
-    data['Close'].plot(figsize=(16,6))
-    fig1 = plt.title('Close Price History')
-    plt.xlabel('Date')
-    plt.ylabel('Close Price')
-    plt.grid()
+    fig1, ax1 = plt.subplots(figsize=(16, 6)) # Create a figure and axes
+    ax1.plot(data['Close'])
+    ax1.set_title('Close Price History')
+    ax1.set_xlabel('Date')
+    ax1.set_ylabel('Close Price')
+    ax1.grid(True)
     st.pyplot(fig1)
 
+    # Plot 2: Closing Price vs Time chart with 100MA & 200MA
     st.subheader("Closing Price vs Time chart with 100MA & 200MA")
     ma100 = data.Close.rolling(100).mean()
     ma200 = data.Close.rolling(200).mean()
-    fig2 = plt.figure(figsize=(12,6))
-    plt.plot(data.Close)
-    plt.plot(ma100)
-    plt.plot(ma200)
+    fig2, ax2 = plt.subplots(figsize=(12, 6)) # Create a new figure and axes
+    ax2.plot(data.Close, label='Close Price')
+    ax2.plot(ma100, label='100MA')
+    ax2.plot(ma200, label='200MA')
+    ax2.legend()
+    ax2.set_title('Close Price with Moving Averages')
     st.pyplot(fig2)
-
+    
     scaler = MinMaxScaler(feature_range=(0, 1))
-    Data = scaler.fit_transform(Data)
+    scaled_data = scaler.fit_transform(data_close)
 
-    X_train, X_test, X_val, y_train, y_test, y_val = create_data(Data, n_future=1, n_past=60, train_test_split_percentage=0.8,
+    X_train, X_test, X_val, y_train, y_test, y_val = create_data(scaled_data, n_future=1, n_past=60, train_test_split_percentage=0.8,
                                                validation_split_percentage = 0)
     model = load_model("latest_model.keras")
 
@@ -79,12 +88,14 @@ def create_data(df, n_future, n_past, train_test_split_percentage, validation_sp
     return np.array(x_train), np.array(x_test), np.array(x_val), np.array(y_train), np.array(y_test), np.array(y_val)
 
 def plot_prediction(test,prediction, stock):
-    plt.plot(test,color='red',label="Real")
-    plt.plot(prediction, color="blue",label="Predicted")
-    plt.title(f"{stock} Prediction")
-    plt.xlabel("Date")
-    plt.ylabel(f"{stock}")
-    plt.legend()
-    plt.show()
+    fig, ax = plt.subplots()
+    ax.plot(test, color='red', label="Real")
+    ax.plot(prediction, color="blue", label="Predicted")
+    ax.set_title(f"{stock} Prediction")
+    ax.set_xlabel("Date")
+    ax.set_ylabel(f"{stock}")
+    ax.legend()
+    return fig
 
-main()
+if __name__ == '__main__':
+    main()
